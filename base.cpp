@@ -32,14 +32,6 @@ int main()
         printf("%d ", a[i]);
     printf("\n");
 
-    FILE * file;
-    file = fopen("/home/user/projects/result.txt", "w");
-    fprintf(file, "Отсортированный по возрастанию массив из %d элементов:\n", n);
-    for (int i = 0; i < n; i++)
-        fprintf(file, "%d ", a[i]);
-    fprintf(file, "\n");
-    fclose(file);
 
-    printf("Результат выполнения программы записан в файл /home/user/projects/result.txt\n");
     return 0;
 }

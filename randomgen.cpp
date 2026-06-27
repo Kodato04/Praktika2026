@@ -11,24 +11,28 @@ int main()
     printf("Выберите способ ввода:\n");
     printf("1 - Ручной ввод\n");
     printf("2 - Генерация случайных чисел\n");
+    printf("3 - Чтение из файла\n");
     printf("Выбор: ");
     scanf("%d", &choice);
 
-    printf("Введите количество элементов массива:\n");
-    printf("n = ");
-    scanf("%d", &n);
-
-    if (n <= 0)
+    if (choice != 3)
     {
-        printf("Ошибка: количество элементов должно быть положительным.\n");
-        return 1;
-    }
+        printf("Введите количество элементов массива:\n");
+        printf("n = ");
+        scanf("%d", &n);
 
-    a = (int *)malloc(n * sizeof(int));
-    if (a == NULL)
-    {
-        printf("Ошибка выделения памяти.\n");
-        return 1;
+        if (n <= 0)
+        {
+            printf("Ошибка: количество элементов должно быть положительным.\n");
+            return 1;
+        }
+
+        a = (int *)malloc(n * sizeof(int));
+        if (a == NULL)
+        {
+            printf("Ошибка выделения памяти.\n");
+            return 1;
+        }
     }
 
     if (choice == 1)
@@ -89,10 +93,44 @@ int main()
             printf("%d ", a[i]);
         printf("\n");
     }
+    else if (choice == 3)
+    {
+        FILE *file;
+        file = fopen("/home/artem/praktika_random/result.txt", "r");
+        if (file == NULL)
+        {
+            printf("Ошибка: не удалось открыть файл.\n");
+            return 1;
+        }
+
+        fscanf(file, "Отсортированный по возрастанию массив из %d элементов:\n", &n);
+        if (n <= 0)
+        {
+            printf("Ошибка: неверное количество элементов в файле.\n");
+            fclose(file);
+            return 1;
+        }
+
+        a = (int *)malloc(n * sizeof(int));
+        if (a == NULL)
+        {
+            printf("Ошибка выделения памяти.\n");
+            fclose(file);
+            return 1;
+        }
+
+        for (int i = 0; i < n; i++)
+            fscanf(file, "%d", &a[i]);
+        fclose(file);
+
+        printf("Массив из файла:\n");
+        for (int i = 0; i < n; i++)
+            printf("%d ", a[i]);
+        printf("\n");
+    }
     else
     {
         printf("Ошибка: неверный выбор.\n");
-        free(a);
         return 1;
     }
 
@@ -121,6 +159,7 @@ int main()
         free(a);
         return 1;
     }
+
     fprintf(file, "Отсортированный по возрастанию массив из %d элементов:\n", n);
     for (int i = 0; i < n; i++)
         fprintf(file, "%d ", a[i]);
